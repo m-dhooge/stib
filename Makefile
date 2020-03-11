@@ -1,4 +1,4 @@
-PRODUCT ?= duckbill
+PRODUCT ?= evachargese
 HWREV ?= v2
 CROSS_COMPILE ?= arm-linux-gnueabi-
 JOBS ?= $(shell cat /proc/cpuinfo | grep processor | wc -l)
@@ -34,7 +34,7 @@ export PATH ROOTFSSIZE
 
 .PHONY: help
 help:
-	@echo 'STIP - Simple Target Image Builder'
+	@echo 'STIB - Simple Target Image Builder'
 	@echo '----------------------------------'
 	@echo ''
 	@echo 'Please have a look at the README.md for valid make targets.'
@@ -47,6 +47,11 @@ jessie-requirements:
 	curl http://emdebian.org/tools/debian/emdebian-toolchain-archive.key | sudo apt-key add -
 	sudo dpkg --add-architecture armel
 	sudo apt-get update
+	sudo apt-get install -y crossbuild-essential-armel
+
+.PHONY: stretch-requirements
+stretch-requirements:
+	sudo apt-get install -y apt-transport-https build-essential make patch multistrap curl bc binfmt-support libssl-dev qemu-user-static lzop
 	sudo apt-get install -y crossbuild-essential-armel
 
 .PHONY: trusty-requirements xenial-requirements zesty-requirements

@@ -1,4 +1,4 @@
-PRODUCT ?= duckbill
+PRODUCT ?= evachargese
 
 all: create-dirs multistrap create-devs
 
