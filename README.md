@@ -83,15 +83,18 @@ $ make rootfs
 ```
 
 However, we want to customize it a little bit:
+This step uses chroot & qemu to run ARM code within the host.
+See https://wiki.archlinux.org/index.php/QEMU#Chrooting_into_arm/arm64_environment_from_x86_64
 
 ```
-$ make install
+$ make install  (not within a docker guest)
 ```
 
 And now, we pack all into a single SD card/eMMC image and split it into smaller chunks
 so that we can deploy it during manufacturing process:
 
 ```
+$ make rootfs-image  (not within a docker guest)
 $ make disk-image
 ```
 

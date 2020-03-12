@@ -63,6 +63,11 @@ trusty-requirements xenial-requirements zesty-requirements:
 	        sed -i -e "s/-y \$$forceyes install/-y install/" /usr/sbin/multistrap; \
 	     fi'
 
+.PHONY: bionic-requirements
+bionic-requirements:
+	sudo apt-get install -y build-essential make patch multistrap bc binfmt-support libssl-dev qemu-user-static lzop
+	sudo apt-get install -y gcc-arm-linux-gnueabi g++-arm-linux-gnueabi
+
 prepare:
 	git submodule init
 	git submodule update
@@ -209,8 +214,8 @@ clean-rootfs:
 images-clean clean-images:
 	rm -f images/*
 
+.PHONY: rootfs-image
 rootfs-image: images/rootfs.img
-.PHONY: images/rootfs.img
 images/rootfs.img:
 	rm -f images/rootfs.img
 	mkdir -p images
