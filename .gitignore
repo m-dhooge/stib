@@ -5,3 +5,4 @@ rootfs-tmp/
 tools/ptgen/ptgen
 images
 linux-modules
+qt*/
