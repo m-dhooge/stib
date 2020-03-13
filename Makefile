@@ -65,7 +65,8 @@ trusty-requirements xenial-requirements zesty-requirements:
 
 .PHONY: bionic-requirements
 bionic-requirements:
-	sudo apt-get install -y build-essential make patch multistrap bc binfmt-support libssl-dev qemu-user-static lzop
+	sudo apt-get install -y build-essential make patch bc libssl-dev lzop
+	sudo apt-get install -y binfmt-support debian-archive-keyring multistrap qemu-user-static
 	sudo apt-get install -y crossbuild-essential-armel
 
 prepare:
