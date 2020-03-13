@@ -199,7 +199,14 @@ endif
 
 	# run dpkg-configure stuff inside the chroot
 	sudo mount -t proc - rootfs/proc
+	# Recent linux doesn't allow writing to special files?
+	sudo mv rootfs/dev rootfs/devX
+	sudo mkdir rootfs/dev
+	#
 	sudo chroot rootfs /init-chroot.sh
+	#
+	sudo rm -rf rootfs/dev
+	sudo mv rootfs/devX rootfs/dev
 	# workarounds to stop some daemons
 	-sudo kill -9 $$(ps ax | grep [q]emu-arm-static | awk '{ print $$1 }')
 	sudo umount rootfs/proc

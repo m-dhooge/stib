@@ -31,21 +31,29 @@ when using it:
 Workflow to generate an image file
 ----------------------------------
 
-To ensure that your host environment is setup corrctly, we have prepared a Makefile target
-which helps you to install the distro packages as required. Simply issue a
+Mostly all steps can be done within a docker guest.
+This allows to choose a version of GCC that is compatible with the Linux kernel
+modified by In-Tech.
+For example, GCC 8 generates assembly that don't compile.
+See https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85745
+
+Only the steps that need to mount a filesystem (e.g. loop or dev) are more
+easily done directly from the host.
+To be sure no parts are compiled from the docker host (with a potentially
+different version of the GCC compiler), it is advises to have no ARM compilers
+installed within the host.
+
+To ensure that your docker guest environment is setup correctly, we have
+prepared a Makefile target which helps you to install the distro packages as
+required. Simply issue a
 
 ```
-$ make jessie-requirements
+$ make bionic-requirements
 ```
 
-or
-
-```
-$ make trusty-requirements
-```
-
-and see which packages are fetched and installed via apt. Note, that the multistrap tool
-in Ubuntu is faulty, so it's patched at this stage when the broken package is detected.
+and see which packages are fetched and installed via apt. Note, that the
+multistrap tool in Ubuntu before bionic is faulty, so it's patched at this
+stage when the broken package is detected.
 This step need to be run only once.
 
 > Note:
@@ -82,13 +90,19 @@ Now it's time to create the basic Debian root filesystem with multistrap:
 $ make rootfs
 ```
 
-However, we want to customize it a little bit:
+And then, we want to customize it a little bit.
+
 This step uses chroot & qemu to run ARM code within the host.
+So you need binfmt-qemu-static & qemu-user-static to be installed.
 See https://wiki.archlinux.org/index.php/QEMU#Chrooting_into_arm/arm64_environment_from_x86_64
 
 ```
+$ make programs
 $ make install  (not within a docker guest)
 ```
+
+Now that the root filesystem is available, we can put additional libraries (e.g. Qt).
+
 
 And now, we pack all into a single SD card/eMMC image and split it into smaller chunks
 so that we can deploy it during manufacturing process:

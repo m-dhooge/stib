@@ -1,6 +1,7 @@
 debian-rootfs/debcache
 debian-rootfs/rootfs
-rootfs
+rootfs/
+rootfs-tmp/
 tools/ptgen/ptgen
 images
 linux-modules
