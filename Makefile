@@ -66,7 +66,7 @@ trusty-requirements xenial-requirements zesty-requirements:
 .PHONY: bionic-requirements
 bionic-requirements:
 	sudo apt-get install -y build-essential make patch multistrap bc binfmt-support libssl-dev qemu-user-static lzop
-	sudo apt-get install -y gcc-arm-linux-gnueabi g++-arm-linux-gnueabi
+	sudo apt-get install -y crossbuild-essential-armel
 
 prepare:
 	git submodule init
