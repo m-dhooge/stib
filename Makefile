@@ -51,8 +51,11 @@ jessie-requirements:
 
 .PHONY: stretch-requirements
 stretch-requirements:
-	sudo apt-get install -y apt-transport-https build-essential make patch multistrap curl bc binfmt-support libssl-dev qemu-user-static lzop
-	sudo apt-get install -y crossbuild-essential-armel
+	sudo apt-get install -y \
+		apt-transport-https curl \
+		build-essential make patch bc libssl-dev lzop \
+		binfmt-support debian-archive-keyring multistrap qemu-user-static \
+		crossbuild-essential-armel
 
 .PHONY: trusty-requirements xenial-requirements zesty-requirements
 trusty-requirements xenial-requirements zesty-requirements:
