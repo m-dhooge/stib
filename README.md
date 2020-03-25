@@ -73,14 +73,18 @@ $ make tools linux imx-bootlets
 Now it's time to create the basic Debian root filesystem with multistrap:
 
 ```
+$ make rootfs-clean
 $ make rootfs
 ```
 
-However, we want to customize it a little bit:
+And then, we want to customize it a little bit.
+
 This step uses chroot & qemu to run ARM code within the host.
+So you need binfmt-qemu-static & qemu-user-static to be installed.
 See https://wiki.archlinux.org/index.php/QEMU#Chrooting_into_arm/arm64_environment_from_x86_64
 
 ```
+$ make programs
 $ make install  (not within a docker guest)
 ```
 

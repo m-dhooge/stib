@@ -1,10 +1,14 @@
 PRODUCT ?= evachargese
 
-all: create-dirs multistrap create-devs
+all: create-dirs keyring multistrap create-devs
 
 create-dirs:
 	mkdir -p rootfs
 	mkdir -p debcache
+
+keyring:
+	mkdir -p rootfs/etc/apt/trusted.gpg.d
+	cp /usr/share/keyrings/debian-archive-keyring.gpg rootfs/etc/apt/trusted.gpg.d
 
 multistrap:
 	sudo multistrap -f multistrap-$(PRODUCT).conf
