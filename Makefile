@@ -208,6 +208,12 @@ endif
 	sudo rm -f rootfs/init-chroot.sh
 	sudo rm -rf rootfs/var/cache/apt/*
 
+rootfs-chroot:
+	sudo mount -t proc - rootfs/proc
+	sudo chroot rootfs /bin/bash --login
+	-sudo kill -9 $$(ps ax | grep [q]emu-arm-static | awk '{ print $$1 }')
+	sudo umount rootfs/proc
+
 clean-rootfs:
 	sudo rm -rf rootfs rootfs-tmp
 
