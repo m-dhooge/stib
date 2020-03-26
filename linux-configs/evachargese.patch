@@ -1,0 +1,26 @@
+diff --git a/arch/arm/boot/dts/imx28-evachargese.dts b/arch/arm/boot/dts/imx28-evachargese.dts
+index 298e1c083c0f..31a0c4fa9d9a 100644
+--- a/arch/arm/boot/dts/imx28-evachargese.dts
++++ b/arch/arm/boot/dts/imx28-evachargese.dts
+@@ -73,8 +73,6 @@
+ 						MX28_PAD_SSP3_MISO__GPIO_2_26
+ 						MX28_PAD_SSP3_SS0__GPIO_2_27
+ 						/* unused external header pins */
+-						MX28_PAD_AUART3_RX__GPIO_3_12
+-						MX28_PAD_AUART3_TX__GPIO_3_13
+ 						MX28_PAD_SSP1_SCK__GPIO_2_12
+ 						MX28_PAD_SSP1_CMD__GPIO_2_13
+ 						MX28_PAD_SSP1_DATA0__GPIO_2_14
+@@ -228,6 +226,12 @@
+ 				status = "okay";
+ 			};
+ 
++			auart3: serial@80070000 {
++				pinctrl-names = "default";
++				pinctrl-0 = <&auart3_2pins_b>;
++				status = "okay";
++			};
++
+ 			usbphy0: usbphy@8007c000 {
+ 				status = "okay";
+ 			};

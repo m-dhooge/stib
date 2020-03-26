@@ -74,6 +74,7 @@ bionic-requirements:
 prepare:
 	git submodule init
 	git submodule update
+	git apply linux-configs/evachargese.patch --directory=linux
 
 tools: tools/fsl-imx-uuc/sdimage tools/ptgen/ptgen tools/elftosb/elftosb
 
@@ -111,6 +112,9 @@ linux/arch/arm/boot/zImage:
 	-$(MAKE) -C linux ARCH=arm CROSS_COMPILE="$(CROSS_COMPILE)" \
 	        INSTALL_MOD_PATH="../linux-modules" modules_install
 	rm -f linux-modules/lib/modules/*/build linux-modules/lib/modules/*/source
+
+linux-restore:
+	git --git-dir=linux/.git restore -- .
 
 linux-clean:
 	rm -f linux/arch/arm/boot/zImage
