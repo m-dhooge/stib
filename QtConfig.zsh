@@ -1,31 +1,55 @@
 #!/bin/zsh
 #
 
-### Define Qt library variable
-QT_PREFIX=qt5
+### Cross-Compilation HOST Settings
+HOST_DIR=$(realpath $(dirname $0))
+HOST_MACHINE=$(uname -m)
 
-### Choose library type (static or shared)
+
+### Cross-compilation TARGET Settings
+SYSROOT=${HOST_DIR}/rootfs
+
+
+### Qt sources
+QT_PREFIX=qt5
+SOURCE_DIR=${HOST_DIR}/${QT_PREFIX}
+QT_GIT_VERSION=$(cd $SOURCE_DIR && git status --porcelain=v2 --branch | grep -P "branch.head \K.*" -o)
+
+
+### Top-level installation directories
+#
+# -prefix <dir> ...... Deployment directory -- from the target device point of view
+#                      [/usr/local/Qt-$QT_VERSION]
+# -extprefix <dir> ... Installation directory -- from the host machine point of view
+#                      [SYSROOT/PREFIX]
+# -hostprefix [dir] .. Installation directory for build tools running on the host machine.
+#                      [EXTPREFIX]
+
+HOST_PREFIX=${HOST_DIR}/${QT_PREFIX}-${HOST_MACHINE}-tools-${QT_GIT_VERSION}
+
+
+### Library type (static or shared)
 LIBTYPE=-shared
 # LIBTYPE=-static
 
-### Choose whether to compile and install the examples
-#EXAMPLES=(-no-compile-examples)
-EXAMPLES=(-make examples -compile-examples)
+
+### Qt Examples
+
+EXAMPLES=(-no-compile-examples)
+#EXAMPLES=(-make examples -compile-examples)
 
 
-### Some internal variables
-ROOTFS=$(realpath $(dirname $0))/rootfs
-SOURCE_DIR=${QT_PREFIX}
+### Where to build
 
-QT_VERSION=$(cd $SOURCE_DIR && git status --porcelain=v2 --branch | grep -P "branch.head \K.*" -o)
-
-BUILD_DIR=${QT_PREFIX}-build-${QT_VERSION}
+BUILD_DIR=${HOST_DIR}/${QT_PREFIX}-build-${QT_GIT_VERSION}
 
 mkdir -p ${BUILD_DIR}
-
 cd ${BUILD_DIR} || exit 1
 
-../${SOURCE_DIR}/configure \
+
+### Calling `configure`
+
+${SOURCE_DIR}/configure \
 \
       -opensource -confirm-license \
       -release \
@@ -35,9 +59,11 @@ cd ${BUILD_DIR} || exit 1
       -device-option CROSS_COMPILE=arm-linux-gnueabi- \
       -c++std    c++14 \
 \
-      -sysroot   ${ROOTFS} \
+      -sysroot   ${SYSROOT} \
+      -hostprefix ${HOST_PREFIX} \
 \
       -make libs \
+\
       ${EXAMPLES} \
 \
       -no-feature-concurrent \
@@ -94,4 +120,4 @@ cd ${BUILD_DIR} || exit 1
       -skip      qtx11extras \
       -skip      qtxmlpatterns \
 \
-      2> ${QT_PREFIX}_${QT_VERSION}_cfg_$(date +%Y-%m-%d_%H%M).txt
+      2> ${QT_PREFIX}_${QT_GIT_VERSION}_cfg_$(date +%Y-%m-%d_%H%M).txt
