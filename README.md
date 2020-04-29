@@ -118,6 +118,7 @@ Check the configuration result file in the build folder for any problem.
 Then, you can launch the compilation:
 
 ```
+$ cd qt5-build-$QTVER
 $ make -j8 -Wfatal-errors
 $ sudo make install
 ```
