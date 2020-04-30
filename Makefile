@@ -194,7 +194,7 @@ endif
 
 rootfs-chroot:
 	sudo mount -t proc - rootfs/proc
-	sudo chroot rootfs /bin/bash --login
+	sudo env TERM=linux chroot rootfs /bin/bash --login
 	-sudo kill -9 $$(ps ax | grep [q]emu-arm-static | awk '{ print $$1 }')
 	sudo umount rootfs/proc
 
@@ -204,9 +204,12 @@ clean-rootfs:
 images-clean clean-images:
 	rm -f images/*
 
+.PHONY: rootfs-ldconfig
+rootfs-ldconfig:
+	sudo chroot rootfs /sbin/ldconfig
+
 .PHONY: rootfs-image
-rootfs-image: images/rootfs.img
-images/rootfs.img:
+rootfs-image:
 	rm -f images/rootfs.img
 	mkdir -p images
 	dd if=/dev/zero of=images/rootfs.img seek=$$(($(ROOTFSSIZE) - 1)) bs=1 count=1

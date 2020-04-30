@@ -31,6 +31,8 @@ when using it:
 Workflow to generate an image file
 ----------------------------------
 
+### The root filesystem
+
 Mostly all steps can be done within a docker guest.
 This allows to choose a version of GCC that is compatible with the Linux kernel
 modified by In-Tech.
@@ -40,7 +42,7 @@ See https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85745
 Only the steps that need to mount a filesystem (e.g. loop or dev) are more
 easily done directly from the host.
 To be sure no parts are compiled from the docker host (with a potentially
-different version of the GCC compiler), it is advises to have no ARM compilers
+different version of the GCC compiler), it is advised to have no ARM compilers
 installed within the host.
 
 To ensure that your docker guest environment is setup correctly, we have
@@ -88,6 +90,8 @@ $ make programs
 $ make install  (not within a docker guest)
 ```
 
+### Additional Libraries
+
 Now that the root filesystem is available, we can put additional libraries that
 will be based on what already exists *inside* of the rootfs.
 
@@ -97,7 +101,7 @@ Note that all the _git_ parts can be done _outside_ the docker guest.
 ```
 $ git clone git://code.qt.io/qt/qt5.git
 $ cd qt5
-$ QTVER=5.14.2
+$ QTVER=5.9
 $ git branch --track $QTVER origin/$QTVER
 $ git checkout $QTVER
 $ for MODULE in qtbase qtserialbus qtserialport qtwebsockets; do
@@ -123,6 +127,17 @@ $ make -j8 -Wfatal-errors
 $ sudo make install
 ```
 
+Note that the Qt _install_ rule doesn't update `/etc/ld.so.cache`.
+A solution is to create a file (e.g. `rootfs/etc/ld.so.conf.d/qt.conf`) that
+contains the path to the lib folder (e.g. `/usr/local/Qt-5.9.9/lib`).
+And then run:
+
+```
+$ make rootfs-ldconfig  (not within a docker guest)
+```
+
+
+### Flashable Image
 
 And now, we pack all into a single SD card/eMMC image and split it into smaller chunks
 so that we can deploy it during manufacturing process:
