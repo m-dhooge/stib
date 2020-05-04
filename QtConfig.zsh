@@ -55,9 +55,7 @@ ${SOURCE_DIR}/configure \
       -recheck-all \
       -release \
       ${LIBTYPE} \
-      -platform  linux-g++ \
-      -device    linux-arm-generic-g++ \
-      -device-option CROSS_COMPILE=arm-linux-gnueabi- \
+      -xplatform linux-arm-gnueabi-g++ \
       -c++std    c++14 \
 \
       -sysroot   ${SYSROOT} \
