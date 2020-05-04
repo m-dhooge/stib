@@ -1,0 +1,36 @@
+###
+### ZSH Antigen
+###
+
+# https://github.com/ohmyzsh/ohmyzsh/wiki
+antigen use oh-my-zsh
+
+
+# https://github.com/b4b4r07/enhancd
+antigen bundle b4b4r07/enhancd
+
+# https://github.com/psprint/zsh-navigation-tools
+antigen bundle psprint/zsh-navigation-tools
+
+# https://github.com/desyncr/fast-syntax-highlighting
+#antigen bundle desyncr/fast-syntax-highlighting
+
+# https://github.com/zsh-users/zsh-completions
+#antigen bundle zsh-users/zsh-completions
+
+# NB: Load this bundle last
+# https://github.com/zsh-users/zsh-history-substring-search
+#antigen bundle zsh-users/zsh-history-substring-search
+
+
+### Prompt Theme
+# https://github.com/ohmyzsh/ohmyzsh/wiki/themes
+# - robbyrussell
+# - kardan
+# - nicoulaj
+# - terminalparty
+antigen theme kardan
+
+
+antigen apply
+

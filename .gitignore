@@ -1,7 +1,9 @@
+.directory
 debian-rootfs/debcache
 debian-rootfs/rootfs
 images
 linux-modules
+qompoter.log
 qt*/
 rootfs
 secc-*/

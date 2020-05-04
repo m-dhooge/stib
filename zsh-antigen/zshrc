@@ -1,0 +1,87 @@
+echo_stderr ()
+{
+    echo $@ >&2
+}
+
+echo_stderr "ZSH is initializing..."
+
+###
+### ZSH Antigen
+###
+
+if [[ -e  $HOME/antigen.zsh ]]; then
+   source $HOME/antigen.zsh
+else
+   source /usr/share/zsh-antigen/antigen.zsh
+fi
+
+# Bundles Config
+ENHANCD_DOT_ARG='.'
+local znt_list_instant_select=1
+
+# Load from cache
+antigen init .antigenrc
+
+#
+# ==> If no prompt is visible on first launch, try `antigen reset`
+#
+
+
+###
+### Colors
+###
+
+# Use GRC -- adapted from unixorn/warhol.plugin.zsh
+# Note: Using ZSH functions lets completion work as expected
+GRC=$HOME/.zshrc.grc
+if [[ -e $GRC ]]; then
+   source $GRC
+else
+   echo_stderr -n "Creating GRC config..."
+   IGNORE='^(diff|ls)$'
+   {
+      for F in /usr/share/grc/conf.*; {
+         F=$(basename $F)
+         F=${F#conf.}
+         if [[ ! $F =~ $IGNORE ]] && which $F > /dev/null; then
+            echo "function $F(){\\grc --colour=auto $F \"\$@\"}"
+         fi
+         echo_stderr -n "."
+      }
+   } > $GRC
+   echo_stderr "  done."
+   source $GRC
+fi
+
+
+###
+### Environment variables
+###
+
+# -i Searches ignore case
+# -F Automatically exit if the entire file can be displayed
+# -R ANSI "color" escape sequences are output in "raw" form
+# -S Chop long lines
+# -X Disables sending the termcap initialization and deinitialization
+export LESS=-iFRSX
+
+# Search executables in HOME
+export PATH=$HOME:$PATH
+
+# Guess terminal type & size
+export TERM=linux
+[[ -e $HOME/termsize ]] && $HOME/termsize
+
+
+###
+### Tmux
+###
+
+# Start Tmux when connecting through SSH
+if [[ -z "$TMUX" ]] && [ "$SSH_CONNECTION" != "" ]; then
+   if [[ -z "$DISPLAY" ]]; then
+      export DISPLAY=:0
+      export XAUTHORITY=$HOME/.Xauthority
+   fi
+   tmux attach-session -t ssh_tmux || tmux new-session -s ssh_tmux
+fi
