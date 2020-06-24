@@ -17,8 +17,17 @@ endif
 ###
 
 .PHONY: all
-all: antigen fzy termsize
+all: antigen dotfiles fzy termsize
 
+
+###
+### dot files
+###
+
+.PHONY: dotfiles
+
+dotfiles:
+	cp vimrc $(USER_DIR)/.vimrc
 
 ###
 ### Antigen

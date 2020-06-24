@@ -19,11 +19,15 @@ fi
 ENHANCD_DOT_ARG='.'
 local znt_list_instant_select=1
 
-# Load from cache
+# Load definitions
 antigen init .antigenrc
 
+# Use or create cache
+[[ -e .antigen/init.zsh ]] || antigen cache-gen
+
 #
-# ==> If no prompt is visible on first launch, try `antigen reset`
+# ==> If no prompt is visible on first launch (wait at least 30s),
+#     try `antigen reset`
 #
 
 
@@ -68,9 +72,21 @@ export LESS=-iFRSX
 # Search executables in HOME
 export PATH=$HOME:$PATH
 
-# Guess terminal type & size
-export TERM=linux
-[[ -e $HOME/termsize ]] && $HOME/termsize
+# Terminal type & size
+
+TERM_SIZE="$(stty size)"
+if [[ "$TERM_SIZE" == "24 80" ]]; then
+   # "Dumb" terminal detected -- likely serial comm with minicom
+   echo_stderr "Replacing 'TERM=$TERM' by 'TERM=vt102'."
+   echo_stderr "Terminal size is $TERM_SIZE -- maybe call 'termsize' to try to retrieve real size!"
+   export TERM=vt102
+else
+   if [[ "$TERM" != "screen" ]]; then
+      echo_stderr "Replacing 'TERM=$TERM' by 'TERM=linux'."
+      export TERM=linux
+   fi
+   echo_stderr "Terminal size is $TERM_SIZE."
+fi
 
 
 ###
