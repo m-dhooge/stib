@@ -132,12 +132,19 @@ docker$ make -j8 -Wfatal-errors
 docker$ sudo make install
 ```
 
+You can also install a pretty ZSH interface!
+
+
+### ldconfig
+
 Note that the Qt _install_ rule doesn't update `/etc/ld.so.cache`.
 A solution is to create a file (e.g. `rootfs/etc/ld.so.conf.d/qt.conf`) that
 contains the path to the lib folder (e.g. `/usr/local/Qt-5.9.9/lib`).
 And then run:
 
 ```
+docker$ echo "/usr/local/Qt-5.9.9/lib" > qt.conf
+docker$ sudo cp qt.conf rootfs/etc/ld.so.conf.d
 host$ make rootfs-ldconfig
 ```
 
