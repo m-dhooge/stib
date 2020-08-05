@@ -1,0 +1,15 @@
+[Unit]
+Description=EVACharge Manager
+
+[Service]
+WorkingDirectory=/root/evacharge-tools/latest/evacharge-manager
+ExecStartPre=/root/evse-gpio.sh export
+ExecStartPre=/bin/stty -F /dev/ttyAPP0 115200
+ExecStartPre=/bin/echo default-on > /sys/class/leds/evse:green:led3/trigger
+ExecStartPre=/bin/echo 200 > /sys/class/leds/evse:green:led3/brightness
+ExecStart=/root/evacharge-tools/latest/evacharge-manager/evacharge-manager --config /root/evacharge-tools/latest/evacharge-manager/evacharge-manager.ini
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+ 

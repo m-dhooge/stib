@@ -1,0 +1,13 @@
+[Unit]
+Description=Charge Point service
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/root/charge-point/latest
+ExecStart=/root/charge-point/latest/charge-point --config /root/charge-point/latest/charge-point.config
+Restart=on-failure
+TimeoutStopSec=15
+
+[Install]
+WantedBy=multi-user.target
