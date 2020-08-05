@@ -167,6 +167,8 @@ ifneq ($(PRODUCT_COMMON),)
 endif
 	# fold in product specific files
 	sudo sh -c 'if [ -d debian-rootfs/files-$(PRODUCT) ]; then cp -a debian-rootfs/files-$(PRODUCT)/* rootfs-tmp/; fi'
+	# Update fake-hwclock "saved" date with current date plus 30min
+	date --utc --date=@$$((`date "+%s"` + 1800)) "+%Y-%m-%d %H:%M:%S" > debian-rootfs/files-evachargese-custom/etc/fake-hwclock.data
 	# and fold in customer specific files (if present)
 	sudo sh -c 'if [ -d debian-rootfs/files-$(PRODUCT)-custom ]; then cp -a debian-rootfs/files-$(PRODUCT)-custom/* rootfs-tmp/ || true; fi'
 ifeq ($(PRODUCT),evachargese)
