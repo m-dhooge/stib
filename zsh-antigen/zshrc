@@ -15,14 +15,10 @@ else
    source /usr/share/zsh-antigen/antigen.zsh
 fi
 
-# Bundles Config
-ENHANCD_DOT_ARG='.'
-local znt_list_instant_select=1
+antigen use oh-my-zsh
+antigen theme kardan
+antigen apply
 
-# Load definitions
-antigen init .antigenrc
-
-# Use or create cache
 [[ -e .antigen/init.zsh ]] || antigen cache-gen
 
 #
@@ -74,6 +70,7 @@ export PATH=$HOME:$PATH
 
 # Terminal type & size
 
+echo_stderr ""
 TERM_SIZE="$(stty size)"
 if [[ "$TERM_SIZE" == "24 80" ]]; then
    # "Dumb" terminal detected -- likely serial comm with minicom
@@ -88,16 +85,9 @@ else
    echo_stderr "Terminal size is $TERM_SIZE."
 fi
 
-
 ###
-### Tmux
+### Current Date
 ###
 
-# Start Tmux when connecting through SSH
-if [[ -z "$TMUX" ]] && [ "$SSH_CONNECTION" != "" ]; then
-   if [[ -z "$DISPLAY" ]]; then
-      export DISPLAY=:0
-      export XAUTHORITY=$HOME/.Xauthority
-   fi
-   tmux attach-session -t ssh_tmux || tmux new-session -s ssh_tmux
-fi
+echo_stderr "\nCurrent date is $(date '+%Y-%m-%d %H:%M:%S %Z')."
+echo_stderr 'You can use SSH to update remotely with: ssh root@<EVA-IP> "date --set=@`date +%s`"'
