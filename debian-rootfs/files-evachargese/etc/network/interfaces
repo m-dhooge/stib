@@ -3,11 +3,16 @@
 
 source /etc/network/interfaces.d/*
 
-auto lo eth0 qca0
+auto lo eth0 eth0:1 qca0
+
+# The loopback network interface
 iface lo inet loopback
 
-auto eth0
-iface eth0 inet static
+# eth0 -- Use DHCP by default
+iface eth0 inet dhcp
+
+# eth0 -- Fallback to static config
+iface eth0:1 inet static
     address 192.168.37.250
     netmask 255.255.255.0
 
